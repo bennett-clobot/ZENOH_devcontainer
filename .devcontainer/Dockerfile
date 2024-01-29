@@ -4,7 +4,6 @@ FROM osrf/ros:galactic-desktop
 ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-
 # Create a non-root user
 RUN groupadd --gid $USER_GID $USERNAME \
   && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
@@ -25,6 +24,10 @@ ARG WORKSPACE=/workspaces/${USERNAME}
 RUN echo "if [ -f ${WORKSPACE}/install/setup.bash ]; then source ${WORKSPACE}/install/setup.bash; fi" >> /home/ros/.bashrc
 
 
+# copy zenohd lib (zenoh router)
+COPY ./zenoh-0.10.1-rc-x86_64-unknown-linux-gnu/ /usr/bin/
+
+
 # Preferred dep to me.
 RUN apt-get update && apt-get install -y python3-pip \
   && apt-get install -y vim \ 
@@ -33,10 +36,10 @@ RUN apt-get update && apt-get install -y python3-pip \
   && apt-get install -y libasound2 \ 
   && apt install -y libcanberra-gtk-module libcanberra-gtk3-module
 
-
 # install zenoh
 # 수동으로 설치(install 시 발생하는 에러 원인 못찾는중)
-#RUN apt-get update && pip install eclipse-zenoh 
+# install zenoh python API
+RUN apt-get update && pip install eclipse-zenoh 
 # install zenohd(router)
 #RUN echo "deb [trusted=yes] https://download.eclipse.org/zenoh/debian-repo/ /" | sudo tee -a /etc/apt/sources.list > /dev/null \ 
 #  && apt-get update \
