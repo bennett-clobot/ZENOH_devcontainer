@@ -6,6 +6,6 @@ def listener(sample):
 if __name__ == "__main__":
     session = zenoh.open({"mode":"peer"})
     print(session)
-    sub = session.declare_subscriber('myhome/kitchen/temp', listener)
-    sub1 = session.declare_subscriber('myhome/kitchen/temp2', listener)
+    sub = session.declare_subscriber('myhome/kitchen/*', listener)
+    #sub1 = session.declare_subscriber('myhome/kitchen/temp2', listener)
     time.sleep(1)
